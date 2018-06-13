@@ -1,0 +1,27 @@
+from pyspark.sql.functions import *
+from pyspark.sql.types import *
+from pyspark.ml.feature import VectorAssembler	
+#from pyspark.mllib.clustering import KMeans, KMeansModel
+from pyspark.ml.clustering import KMeans
+ 
+df = (sqlContext
+            .read.format('com.databricks.spark.csv')
+            .options(header='false', delimiter=' ', inferSchema='true')
+            .load("kmeans_data.txt"))
+			
+assembler = (VectorAssembler(
+    inputCols=["C0", "C1", "C2"],
+    outputCol="features"))
+	
+dataset = assembler.transform(df)	
+	
+kmeans = KMeans().setK(2).setSeed(1)	
+model = kmeans.fit(dataset)		
+
+# Shows the result.
+centers = model.clusterCenters()
+print("Cluster Centers: ")
+for center in centers:
+    print(center)
+	
+model.transform(dataset).show()	

@@ -1,0 +1,238 @@
+[abosede2@badboy ~]$ spark-submit --master local[16] trade_data_count.py
+Ivy Default Cache set to: /home/abosede2/.ivy2/cache
+The jars for the packages stored in: /home/abosede2/.ivy2/jars
+:: loading settings :: url = jar:file:/usr/local/spark-1.6.1/assembly/target/scala-2.11/spark-assembly-1.6.1-hadoop2.2.0.jar!/org/apache/ivy/core/settings/ivysettings.xml
+com.databricks#spark-csv_2.11 added as a dependency
+:: resolving dependencies :: org.apache.spark#spark-submit-parent;1.0
+        confs: [default]
+        found com.databricks#spark-csv_2.11;1.3.0 in central
+        found org.apache.commons#commons-csv;1.1 in central
+        found com.univocity#univocity-parsers;1.5.1 in central
+:: resolution report :: resolve 162ms :: artifacts dl 8ms
+        :: modules in use:
+        com.databricks#spark-csv_2.11;1.3.0 from central in [default]
+        com.univocity#univocity-parsers;1.5.1 from central in [default]
+        org.apache.commons#commons-csv;1.1 from central in [default]
+        ---------------------------------------------------------------------
+        |                  |            modules            ||   artifacts   |
+        |       conf       | number| search|dwnlded|evicted|| number|dwnlded|
+        ---------------------------------------------------------------------
+        |      default     |   3   |   0   |   0   |   0   ||   3   |   0   |
+        ---------------------------------------------------------------------
+:: retrieving :: org.apache.spark#spark-submit-parent
+        confs: [default]
+        0 artifacts copied, 3 already retrieved (0kB/7ms)
+[Stage 0:>                                                       (1 + 16) / 235]^CTraceback (most recent call last):
+  File "/home/abosede2/trade_data_count.py", line 80, in <module>
+    print("Raw data is %d rows." % data.count())
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/sql/dataframe.py", line 269, in count
+  File "/usr/lib/python2.7/site-packages/py4j-0.9.2-py2.7.egg/py4j/java_gateway.py", line 834, in __call__
+    answer = self.gateway_client.send_command(command)
+  File "/usr/lib/python2.7/site-packages/py4j-0.9.2-py2.7.egg/py4j/java_gateway.py", line 648, in send_command
+    response = connection.send_command(command)
+  File "/usr/lib/python2.7/site-packages/py4j-0.9.2-py2.7.egg/py4j/java_gateway.py", line 763, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib64/python2.7/socket.py", line 430, in readline
+    data = recv(1)
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/context.py", line 225, in signal_handler
+KeyboardInterrupt
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 157, in manager
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 157, in manager
+Traceback (most recent call last):
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 61, in worker
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 157, in manager
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 61, in worker
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/worker.py", line 136, in main
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/worker.py", line 136, in main
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 61, in worker
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/worker.py", line 136, in main
+    if read_int(infile) == SpecialLengths.END_OF_STREAM:
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/serializers.py", line 545, in read_int
+    if read_int(infile) == SpecialLengths.END_OF_STREAM:
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/serializers.py", line 545, in read_int
+    if read_int(infile) == SpecialLengths.END_OF_STREAM:
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/serializers.py", line 545, in read_int
+    raise EOFError
+EOFError
+    raise EOFError
+    raise EOFError
+EOFError
+EOFError
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 157, in manager
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 157, in manager
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 61, in worker
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 61, in worker
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/worker.py", line 136, in main
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/worker.py", line 136, in main
+Traceback (most recent call last):
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 157, in manager
+Traceback (most recent call last):
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 61, in worker
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/worker.py", line 136, in main
+    if read_int(infile) == SpecialLengths.END_OF_STREAM:
+    if read_int(infile) == SpecialLengths.END_OF_STREAM:
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/serializers.py", line 545, in read_int
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/serializers.py", line 545, in read_int
+    if read_int(infile) == SpecialLengths.END_OF_STREAM:
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/serializers.py", line 545, in read_int
+    raise EOFError
+EOFError
+    raise EOFError
+EOFError
+    raise EOFError
+EOFError
+Traceback (most recent call last):
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 157, in manager
+Traceback (most recent call last):
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 157, in manager
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 157, in manager
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 61, in worker
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 61, in worker
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/worker.py", line 136, in main
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/worker.py", line 136, in main
+    if read_int(infile) == SpecialLengths.END_OF_STREAM:
+    if read_int(infile) == SpecialLengths.END_OF_STREAM:
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/serializers.py", line 545, in read_int
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/serializers.py", line 545, in read_int
+    raise EOFError
+EOFError
+    raise EOFError
+EOFError
+Traceback (most recent call last):
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 157, in manager
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 61, in worker
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/worker.py", line 136, in main
+    if read_int(infile) == SpecialLengths.END_OF_STREAM:
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/serializers.py", line 545, in read_int
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 61, in worker
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/worker.py", line 136, in main
+    raise EOFError
+EOFError
+    if read_int(infile) == SpecialLengths.END_OF_STREAM:
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/serializers.py", line 545, in read_int
+    raise EOFError
+EOFError
+Traceback (most recent call last):
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 157, in manager
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 61, in worker
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/worker.py", line 136, in main
+    if read_int(infile) == SpecialLengths.END_OF_STREAM:
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/serializers.py", line 545, in read_int
+    raise EOFError
+EOFError
+Traceback (most recent call last):
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 157, in manager
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 61, in worker
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/worker.py", line 136, in main
+    if read_int(infile) == SpecialLengths.END_OF_STREAM:
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/serializers.py", line 545, in read_int
+    raise EOFError
+EOFError
+Traceback (most recent call last):
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 157, in manager
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 61, in worker
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/worker.py", line 136, in main
+    if read_int(infile) == SpecialLengths.END_OF_STREAM:
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/serializers.py", line 545, in read_int
+    raise EOFError
+EOFError
+Traceback (most recent call last):
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 157, in manager
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 61, in worker
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/worker.py", line 136, in main
+    if read_int(infile) == SpecialLengths.END_OF_STREAM:
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/serializers.py", line 545, in read_int
+    raise EOFError
+EOFError
+Traceback (most recent call last):
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 157, in manager
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 61, in worker
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/worker.py", line 136, in main
+    if read_int(infile) == SpecialLengths.END_OF_STREAM:
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/serializers.py", line 545, in read_int
+    raise EOFError
+EOFError
+Traceback (most recent call last):
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 157, in manager
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 61, in worker
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/worker.py", line 136, in main
+    if read_int(infile) == SpecialLengths.END_OF_STREAM:
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/serializers.py", line 545, in read_int
+    raise EOFError
+EOFError
+Traceback (most recent call last):
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 157, in manager
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 61, in worker
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/worker.py", line 136, in main
+    if read_int(infile) == SpecialLengths.END_OF_STREAM:
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/serializers.py", line 545, in read_int
+    raise EOFError
+EOFError
+Traceback (most recent call last):
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 157, in manager
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 61, in worker
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/worker.py", line 136, in main
+    if read_int(infile) == SpecialLengths.END_OF_STREAM:
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/serializers.py", line 545, in read_int
+    raise EOFError
+EOFError
+Traceback (most recent call last):
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 157, in manager
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 61, in worker
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/worker.py", line 136, in main
+    if read_int(infile) == SpecialLengths.END_OF_STREAM:
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/serializers.py", line 545, in read_int
+    raise EOFError
+EOFError
+Traceback (most recent call last):
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 157, in manager
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 61, in worker
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/worker.py", line 136, in main
+    if read_int(infile) == SpecialLengths.END_OF_STREAM:
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/serializers.py", line 545, in read_int
+    raise EOFError
+EOFError
+Traceback (most recent call last):
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 157, in manager
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 61, in worker
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/worker.py", line 136, in main
+    if read_int(infile) == SpecialLengths.END_OF_STREAM:
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/serializers.py", line 545, in read_int
+    raise EOFError
+EOFError
+Traceback (most recent call last):
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 157, in manager
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 61, in worker
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/worker.py", line 136, in main
+    if read_int(infile) == SpecialLengths.END_OF_STREAM:
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/serializers.py", line 545, in read_int
+    raise EOFError
+Traceback (most recent call last):
+EOFError
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 157, in manager
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 61, in worker
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/worker.py", line 136, in main
+    if read_int(infile) == SpecialLengths.END_OF_STREAM:
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/serializers.py", line 545, in read_int
+    raise EOFError
+EOFError
+Traceback (most recent call last):
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 157, in manager
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/daemon.py", line 61, in worker
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/worker.py", line 136, in main
+    if read_int(infile) == SpecialLengths.END_OF_STREAM:
+  File "/usr/local/spark-1.6.1/python/lib/pyspark.zip/pyspark/serializers.py", line 545, in read_int
+    raise EOFError
+EOFError
+16/10/15 19:35:43 WARN QueuedThreadPool: 16 threads could not be stopped
+16/10/15 19:35:43 ERROR LiveListenerBus: SparkListenerBus has already stopped! Dropping event SparkListenerTaskEnd(0,0,ShuffleMapTask,TaskKilled,org.apache.spark.scheduler.TaskInfo@73033d30,null)
+16/10/15 19:35:43 ERROR LiveListenerBus: SparkListenerBus has already stopped! Dropping event SparkListenerTaskEnd(0,0,ShuffleMapTask,TaskKilled,org.apache.spark.scheduler.TaskInfo@27c61fb,null)
+16/10/15 19:35:43 ERROR LiveListenerBus: SparkListenerBus has already stopped! Dropping event SparkListenerTaskEnd(0,0,ShuffleMapTask,TaskKilled,org.apache.spark.scheduler.TaskInfo@16a95ce1,null)
+16/10/15 19:35:43 ERROR LiveListenerBus: SparkListenerBus has already stopped! Dropping event SparkListenerTaskEnd(0,0,ShuffleMapTask,TaskKilled,org.apache.spark.scheduler.TaskInfo@1396f6c8,null)
+16/10/15 19:35:43 ERROR LiveListenerBus: SparkListenerBus has already stopped! Dropping event SparkListenerTaskEnd(0,0,ShuffleMapTask,TaskKilled,org.apache.spark.scheduler.TaskInfo@7916b337,null)
+16/10/15 19:35:43 ERROR LiveListenerBus: SparkListenerBus has already stopped! Dropping event SparkListenerTaskEnd(0,0,ShuffleMapTask,TaskKilled,org.apache.spark.scheduler.TaskInfo@18046657,null)
+16/10/15 19:35:43 ERROR LiveListenerBus: SparkListenerBus has already stopped! Dropping event SparkListenerTaskEnd(0,0,ShuffleMapTask,TaskKilled,org.apache.spark.scheduler.TaskInfo@44166fe2,null)

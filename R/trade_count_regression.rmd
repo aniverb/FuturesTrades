@@ -1,0 +1,202 @@
+---
+title: "Trade Count Regression"
+author: "Tobi Bosede"
+date: "March 22, 2017"
+output: html_document
+---
+550.700
+```{r, message=FALSE, warning=FALSE}
+library(mgcv)
+library(ggplot2)
+```
+
+```{r}
+setwd("C:/Users/aniverb/Documents/Grad_School/JHU/700")
+trade_data=read.table("trades_count_regression_2016-11-18.txt", sep="\t", header=T)
+trade_data=trade_data[order(trade_data$Date),]
+head(trade_data)
+```
+
+```{r}
+#use only half of data randomly split into train and test
+n=nrow(trade_data)
+lastDate=as.vector(trade_data$Date[n/2])
+nRem=nrow(subset(trade_data[(n/2+1):n,], Date==lastDate))
+train=trade_data[1:(n/2+nRem), ] #past data, ends with 8/2 data 
+set.seed(12-1-16)
+test_id=sample((n/2+nRem+1):n, (n/2-nRem))[1:floor((n/2-nRem)/2)]
+test1=trade_data[test_id, ] #future data
+test2=trade_data[-test_id, ] #reserve data
+```
+
+Build linear regression model with penalized cubic spline. Spline parameters found by cross validation.
+```{r}
+model1 <- gam(TradeTotBCTrans ~ s(TimeToMaturity, bs="cr") + s(DayofMonth, bs="cr") + factor(ProductType) + factor(ProductName) + factor(DayOfTheWeek), family=gaussian(), data = train, method="GCV.Cp", select=TRUE)
+summary(model1)
+```
+The model is not very good as the Adjust R sq is barely .5 as well, only about half of the deviance/variation is explained.
+
+```{r}
+plot(model1)
+p <- predict(model1, type="lpmatrix")
+
+```{r}
+beta <- coef(model1)[grepl("TimeToMaturity", names(coef(model1)))]
+s <- p[,grepl("TimeToMaturity", colnames(p))] %*% beta
+ggplot(data=cbind.data.frame(s, train$TimeToMaturity), aes(x=train$TimeToMaturity, y=s, ymin = -5, ymax = 3)) + geom_line()
+beta <- coef(model1)[grepl("DayofMonth", names(coef(model1)))]
+s <- p[,grepl("DayofMonth", colnames(p))] %*% beta
+ggplot(data=cbind.data.frame(s, train$DayofMonth), aes(x=train$DayofMonth, y=s, ymin = -5, ymax = 3)) + geom_line()
+```
+
+```{r}
+model1$coefficients
+model1$sp #spline parameters
+```
+
+Unsurprisingly, the below residuals are quite large, especially since they are for the box cox transformed trade counts. However they seem constant so an assumption of the linear regression model is fufilled.
+```{r}
+res=model1$residuals
+plot(res, pch=20)
+hist(res)
+```
+
+Actual values are black, predicted values are red
+```{r}
+trainPred=model1$fitted.values
+plot(train$TimeToMaturity, train$TradeTotBCTrans, pch=20, ylim=c(min(train$TradeTotBCTrans, trainPred), max(train$TradeTotBCTrans, trainPred)))
+points(train$TimeToMaturity, trainPred, col="red", pch=20)
+legend("topright", c("actual", "predicted"),lwd=c(3,3),col=c("black", "red"))
+
+plot(train$Day, train$TradeTotBCTrans, pch=20, ylim=c(min(train$TradeTotBCTrans, trainPred), max(train$TradeTotBCTrans, trainPred)))
+points(train$Day, trainPred, col="red", pch=20)
+```
+
+Model trained on 1/2 of past data so only testing on 1/4 of randomized future data.
+```{r}
+new_data1=test1
+head(new_data1)
+new_data1Pred <- predict(model1, new_data1)
+new_data1["Prediction"]=new_data1Pred
+plot(new_data1$TimeToMaturity, new_data1$TradeTotBCTrans, pch=20, ylim=c(min(new_data1$TradeTotBCTrans, new_data1Pred), max(new_data1$TradeTotBCTrans, new_data1Pred)))
+points(new_data1$TimeToMaturity, new_data1$Prediction, col="red", pch=20)
+legend("topright", c("actual", "predicted"),lwd=c(3,3),col=c("black", "red"))
+
+plot(new_data1$Day, new_data1$TradeTotBCTrans, pch=20, ylim=c(min(new_data1$TradeTotBCTrans, new_data1Pred), max(new_data1$TradeTotBCTrans, new_data1Pred)))
+points(new_data1$Day, new_data1$Prediction, col="red", pch=20)
+```
+
+```{r}
+model1prime <- gam(TradeTotBCTrans ~ s(TimeToMaturity, bs = "cr") + s(DayofMonth, bs = "cr") + factor(ProductType) +   factor(DayOfTheWeek), family=gaussian(), data = train, method="GCV.Cp", select=TRUE)
+summary(model1prime)
+new_data1PredP <- predict(model1prime, new_data1)
+new_data1["PredictionPrime"]=new_data1PredP
+```
+
+Calculating mean absolute error (MAE) and means for each product type.
+```{r}
+types=c('Metal', 'Bond', 'Agr', 'Energy', 'Index', 'FX')
+MAEone_mod=c()
+MAEone_modP=c()
+medians=c()
+count=0
+for (type in types){
+  count=count+1
+  typsub=subset(new_data1, ProductType==type)
+  MAEone_mod[count]= mean(abs(typsub$TradeTotBCTrans-typsub$Prediction))
+  MAEone_modP[count]= mean(abs(typsub$TradeTotBCTrans-typsub$PredictionPrime))
+  medians[count]=median(typsub$TradeTotBCTrans)
+}
+```
+
+Creating models for each product type.
+```{r}
+placeH=data.frame(Instrument=NULL, STTM=NULL, TimeToMat=NULL)
+placeHD=data.frame(Instrument=NULL, sDoM=NULL, DoM=NULL)
+MAEmult_mod=c()
+MAEmult_modPrime=c()
+all_products=c()
+all_medians=c()
+all_MAE=c()
+all_MAEprime=c()
+count=0
+for (type in types){
+  count=count+1
+  typsub=subset(train, ProductType==type)
+  #model2 
+  model <- gam(TradeTotBCTrans ~ s(TimeToMaturity, bs="cr") + s(DayofMonth, bs="cr") + factor(ProductName) + factor(DayOfTheWeek), family=gaussian(), data = typsub, method="GCV.Cp", select=TRUE)
+  print(summary(model))
+  plot(model)
+  
+  #superimposed spline plots
+ p <- predict(model, type="lpmatrix")
+ 
+ beta <- coef(model)[grepl("TimeToMaturity", names(coef(model)))]
+ sTTM <- p[,grepl("TimeToMaturity", colnames(p))] %*% beta
+ placeH= rbind(placeH, data.frame(Instrument=rep(type, nrow(typsub)), STTM=sTTM, TTM=typsub$TimeToMaturity))
+  
+ beta <- coef(model)[grepl("DayofMonth", names(coef(model)))]
+ sDoM <- p[,grepl("DayofMonth", colnames(p))] %*% beta
+ placeHD = rbind(placeHD, data.frame(Instrument=rep(type, nrow(typsub)), sDoM=sDoM, DoM=typsub$DayofMonth))
+  
+ #Model2'
+  modelPrime <- gam(TradeTotBCTrans ~ s(TimeToMaturity, bs = "cr") + s(DayofMonth, bs = "cr") +  factor(DayOfTheWeek), family=gaussian(), data = typsub, method="GCV.Cp", select=TRUE)
+  print(summary(modelPrime))
+  plot(modelPrime)
+  
+  typsub_new=subset(new_data1, ProductType==type)
+  new_data1Pred <- predict(model, typsub_new)
+  typsub_new["Prediction"]=new_data1Pred
+  cat(type)
+  plot(typsub_new$TimeToMaturity, typsub_new$TradeTotBCTrans, pch=20, ylim=c(min(typsub_new$TradeTotBCTrans, typsub_new$Prediction), max(typsub_new$TradeTotBCTrans, typsub_new$Prediction)))
+  points(typsub_new$TimeToMaturity, typsub_new$Prediction, col="red", pch=20)
+  legend("topright", c("actual", "predicted"),lwd=c(3,3),col=c("black", "red"))
+  plot(typsub_new$Day, typsub_new$TradeTotBCTrans, pch=20, ylim=c(min(typsub_new$TradeTotBCTrans, typsub_new$Prediction), max(typsub_new$TradeTotBCTrans, typsub_new$Prediction)))
+  points(typsub_new$Day, typsub_new$Prediction, col="red", pch=20)
+  MAEmult_mod[count]= mean(abs(typsub_new$TradeTotBCTrans-typsub_new$Prediction))
+  
+  typsub_newT=typsub_new[rep(1,2200),]
+  true=typsub_newT$Day
+  set.seed(1-13-17)
+  typsub_newT['Day']=sample(rep(1:140, 16)[1:2200], 2200)
+  print(head(typsub_newT))
+  new_data1PredT <- predict(model, typsub_newT)
+  typsub_newT["Prediction"]=new_data1PredT
+  
+  new_data1PredTP <- predict(modelPrime, typsub_newT)
+  typsub_newT["PredictionPrime"]=new_data1PredTP
+  
+  legend("topright", c("actual", "predicted"), lwd=c(3,3), col=c("black", "red"))
+  plot(typsub_newT$Day, typsub_newT$TradeTotBCTrans, pch=20, ylim=c(min(typsub_newT$TradeTotBCTrans, typsub_newT$Prediction), max(typsub_newT$TradeTotBCTrans, typsub_newT$Prediction)))
+  points(typsub_newT$Day, typsub_newT$Prediction, col="red", pch=20)
+  cat("True Day:", true[1], "\n", "\n")
+  
+  MAEmult_modP=c()
+  MAEmult_modPprime=c()
+  medianP=c()
+  countP=0
+  products=as.vector(unique(typsub_new$ProductName))
+  all_products=append(all_products,products,length(all_products))
+  for (product in products){
+      countP=countP+1
+      prodsub=subset(typsub_new, ProductName==product)
+      MAEmult_modP[countP]= mean(abs(prodsub$TradeTotBCTrans-prodsub$Prediction))
+      MAEmult_modPprime[countP]= mean(abs(prodsub$TradeTotBCTrans-prodsub$PredictionPrime))
+      medianP[countP]=median(prodsub$TradeTotBCTrans)
+  }
+  all_MAE=append(all_MAE,MAEmult_modP,length(all_MAE))
+  all_MAEprime=append(all_MAEprime,MAEmult_modPprime,length(all_MAE))
+  all_medians=append(all_medians, medianP, length(all_medians))
+}
+p<-ggplot(placeH, aes(x=TTM, y=STTM, group=Instrument, ymin = -10, ymax = 10)) + geom_line(aes(color=Instrument), size=1, alpha = 0.6)+ ylab("Trade Total Box Cox Trans")+xlab("Time to Maturity") + labs(title="Model 2 Spline on Time to Maturity")+ theme_classic()+scale_color_brewer(palette="Dark2") 
+p
+
+pD<-ggplot(placeHD, aes(x=DoM, y=sDoM, group=Instrument, ymin = -10, ymax = 10)) + geom_line(aes(color=Instrument), size=1, alpha = 0.6)+ ylab("Trade Total Box Cox Trans")+xlab("Day of Month") + labs(title="Model 2 Spline on Day of the Month")+ theme_classic()+scale_color_brewer(palette="Dark2") 
+pD
+
+data.frame(types, Model2=MAEmult_mod, Model2Prime=MAEmult_modPprime, Model1=MAEone_mod, Model1Prime=MAEone_modP, Median=medians) #separate models for each product type
+#comparing all 4 models
+
+data.frame(all_products, Model2=all_MAE, Model2Prime=all_MAEprime, Median=all_medians) #comparing just separate models
+```
+Removing spline from day improves future prediction. In general the huge variances in the medians of products as opposed to type seems to indicate that we should drill down even further and make multiple models for each product .

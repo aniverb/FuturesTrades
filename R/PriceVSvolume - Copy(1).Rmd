@@ -1,0 +1,74 @@
+---
+title: "Price Vol VS Tade Volume"
+author: "Tobi Bosede"
+date: "March 1, 2017"
+output: html_document
+---
+```{r, warning=F}
+setwd("C:\\Users\\aniverb\\Documents\\Grad_School\\JHU\\700")
+
+tv=read.table("trades_pivot_2016-11-18.txt", sep="\t", header=T) 
+head(tv)
+pv=read.table("trades_pivot_vol_2016-11-18.txt", sep="\t", header = T)
+head(pv) 
+tv_pv_comb=cbind(tv[,1:16], pv[,4:16], tv[17], pv[17])
+head(tv_pv_comb)
+
+pvals=c()
+prod=c()
+products=as.vector(unique(tv_pv_comb$ProductName))
+for (product in products){ #in results put 3 plots on 1 line
+  tv_pv_combS=subset(tv_pv_comb, ProductName==product)
+  maturities=as.vector(unique(tv_pv_combS$Maturity))
+  for (maturity in maturities){
+    tv_pv_combM=subset(tv_pv_combS, Maturity==maturity)
+    if (!(tv_pv_combM$ProductName=="NQ"& tv_pv_combM$Maturity=='2017-06-16') & !(tv_pv_combM$ProductName=="KE"& tv_pv_combM$Maturity=='2016-05-13')){
+      cors=apply(tv_pv_combM, 1, function(x){cor(as.numeric(x[4:16]), as.numeric(x[17:29]), use="na.or.complete")})
+      if (length(cors)>=30){
+        days=c(1:length(cors)) #change to use actual date in plot
+        dfCors=data.frame(days, cors=as.vector(cors))
+        mod=lm(cors~days, dfCors)
+        cor_hat=predict(mod)
+        plot(cors, xlab="Day", ylab="correlation coefficient", main=paste(product, "Maturity:", maturity))
+        lines(cor_hat, col="red")
+        stat=summary(mod)
+        stat=summary(mod)
+        cof=stat$coefficients
+        pval=cof[,4][2]
+        pvals=append(pvals, pval, after=length(pvals))
+        prod=append(prod, paste(product, maturity), after=length(prod))
+        trades=as.vector(as.matrix(t(tv_pv_combM[,4:16])))
+        priceVol=as.vector(as.matrix(t(tv_pv_combM[,17:29])))
+        df=data.frame(trades, priceVol)[order(trades),]
+        df=na.omit(df)
+        n=nrow(df)
+        dfTrim=df[ceiling(.05*n):round(.95*n),]
+        dfTrimO=dfTrim[order(dfTrim$priceVol),]
+        n2=nrow(dfTrimO)
+        dfTrimP=dfTrimO[ceiling(.05*n2):round(.95*n2),]
+        plot(dfTrimP, xlab="trade volume hourly", ylab="price volatility hourly", main=paste(product, "Maturity:", maturity), pch=20) 
+        daily=tv_pv_combM[,30:31][order(tv_pv_combM$DayTradeTotal),]
+        daily=na.omit(daily)
+        nD=nrow(daily)
+        dailyTrim=daily[ceiling(.05*nD):round(.95*nD),]
+        dailyTrimO=dailyTrim[order(dailyTrim$DayVolatility),]
+        nD2=nrow(dailyTrimO)
+        dailyTrimP=dailyTrimO[ceiling(.05*nD2):round(.95*nD2),]
+        plot(dailyTrimP, xlab="trade volume daily", ylab="price volatility daily", main=paste(product, "Maturity:", maturity), pch=20)
+      }
+    }
+  }
+}
+
+pvalsO=order(pvals)
+corSig=data.frame(prod, pvals)[pvalsO,]
+nrow(corSig)
+corSigO=corSig[which(corSig$pvals<.05),]
+corSigO
+
+set.seed(3-3-17)
+u=sort(runif(147))
+plot(corSig$pvals, u, ylab="uniform", xlab="P-values", main="Q-Q Plot")
+
+```
+

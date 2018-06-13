@@ -1,0 +1,12 @@
+parsed_data[0], parsed_data[1], parsed_data[2], parsed_data[3], parsed_data[4], parsed_data[5], parsed_data[6], parsed_data[7], parsed_data[8], parsed_data[9], parsed_data[10], parsed_data[11], parsed_data[12], parsed_data[13], parsed_data[14], parsed_data[15], parsed_data[16], parsed_data[17], parsed_data[18], parsed_data[19], parsed_data[20], parsed_data[21], parsed_data[22], parsed_data[23], parsed_data[24], parsed_data[25], parsed_data[26], parsed_data[27], parsed_data[28], parsed_data[29], parsed_data[30], parsed_data[31], parsed_data[32], parsed_data[33], parsed_data[34], parsed_data[35], parsed_data[36], parsed_data[37], parsed_data[38], parsed_data[39], parsed_data[40], parsed_data[41], parsed_data[42], parsed_data[43], parsed_data[44], parsed_data[45], parsed_data[46], parsed_data[47], parsed_data[48], parsed_data[49], parsed_data[50], parsed_data[51], parsed_data[52], parsed_data[53], parsed_data[54], parsed_data[55], parsed_data[56], parsed_data[57], parsed_data[58], parsed_data[59], parsed_data[60], parsed_data[61], parsed_data[62], parsed_data[63], parsed_data[64], parsed_data[65], parsed_data[66], parsed_data[67], parsed_data[68], parsed_data[69], parsed_data[70], parsed_data[71], parsed_data[72], parsed_data[73], parsed_data[74], parsed_data[75], parsed_data[76], parsed_data[77], parsed_data[78], parsed_data[79], parsed_data[80], parsed_data[81], parsed_data[82], parsed_data[83], parsed_data[84], parsed_data[85], parsed_data[86], parsed_data[87], parsed_data[88], parsed_data[89], parsed_data[90], parsed_data[91], parsed_data[92], parsed_data[93], parsed_data[94], parsed_data[95], parsed_data[96], parsed_data[97], parsed_data[98], parsed_data[99], parsed_data[100], parsed_data[101], parsed_data[102], parsed_data[103], parsed_data[104], parsed_data[105]
+
+[Stage 0:====================================================(229 + -113) / 211]16/09/29 21:27:20 ERROR TaskSchedulerImpl: Lost executor 1 on badboy.win.ad.jhu.edu: Remote RPC client disassociated. Likely due to containers exceeding thresholds, or network issues. Check driver logs for WARN messages.
+
+grep -rl 'raw_dataset_rdd.pickle' ~
+Agr	Energy	Index
+0.181621902	0.112926559	0.163936115
+
+Metal	Bond         FX   
+0.378822055	0.253676471  0.300769354
+
+

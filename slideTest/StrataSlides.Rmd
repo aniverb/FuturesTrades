@@ -1,0 +1,372 @@
+---
+title: "Big Data Analysis of Futures"
+author: "Tobi Bosede"
+date: "September 27, 2017"
+output:
+  ioslides_presentation: null
+  beamer_presentation: default
+  slidy_presentation: default
+  widescreen: yes
+subtitle: Penalized Regression Splines for Trade Volume Prediction and Price Volatility
+  vs. Trade Volume Relationship
+header-includes: null
+---
+##Quick Intro
+- Machine Learning Engineer   
+
+- Masters in applied mathematics and statistics from Johns Hopkins University  
+
+- Bachelors in pure mathematics from the University of Pennsylvania  
+
+- Spent years working in Healthcare, Finance, and Telecommunications industries in  roles spanning data analyst, software engineer, and data scientist
+
+- Talk is based on my graduate thesis
+
+##Problem Statement 
+How can we accurately predict trade volume?  
+    
+  - many trading algorithms depend on volume  
+  - accurate volume predictions over a given interval allows traders to be more effective  
+  - volume prediction increases trading strategy capacity, controls trading risk
+
+How can we understand the relationships between trade volume and price volatility?
+    
+  - new information on the market causes agents such as hedgers and speculators to trade until prices reach a revised equilibrium which then changes price and trading volume
+  - provides information on the efficiency of futures markets which regulators can then use to decide upon market restrictions
+  
+## About the Data
+- Hundreds of millions of rows of futures trading in the form of order books 
+- Comes from the Chicago Mercantile Exchange (CME)
+- Collected from May 2, 2016 to November 18, 2016 
+- Raw data from the CME included extended hours trading 
+- Fields included instrument name, maturity, date, time stamp, price, and quantity  
+- Futures were comprised of 22 financial instruments spanning six markets  
+    - foreign exchange, metal, energy, index, bond, and agriculture 
+- Trades were recorded roughly every half second
+- Product defined as instrument/maturity pair
+    - 149 products in total
+
+##Raw Data 
+<div class="centered">
+![](raw_data.jpg)
+</div>
+
+
+#Methods
+
+##Processing Data
+How can we efficiently process the overwhelming amount of data such that it is amenable to analysis?   
+
+We use Apache Spark to process the data  
+
+- What is Spark?  
+    - Spark is a fault-tolerant and general-purpose cluster computing system providing APIs in Java, Scala, Python, and R
+- One node cluster set up
+    - Linux Server
+    - 32 cores
+- Used Python API, i.e. Pyspark
+- Used SparkSQL for parsing and reformating, treating raw data as table
+- Data became manageable to visualize with pure python and analyze in R
+
+##Regression Data Set
+```{r, out.width = "1000px", echo=F}
+knitr::include_graphics("regression.jpg")
+```
+
+#Exploratory Data Analysis
+##Checking for Normality
+<div class="centered">
+```{r, out.width = "450px", echo=F}
+par(mfrow=c(2,1))
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\strata_noMat_skewHist.png")
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\strata_noMat_Hist.png")
+```
+</div>
+
+##Checking Normality at Market Level
+<div class="centered">
+```{r, out.width = "1000px", echo=F}
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\strata_types_hist.png")
+```
+</div>
+
+##Day Effects at Market Level
+<div class="centered">
+```{r, out.width = "1000px", echo=F}
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\strata_day_noMat.png")
+```
+</div>
+
+##Day of Month Effects at Market Level
+<div class="centered">
+```{r, out.width = "1000px", echo=F}
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\strata_day_of_mo_noMat.png")
+```
+</div>
+
+##Time to Maturity Effects at Market Level
+<div class="centered">
+```{r, out.width = "1000px", echo=F}
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\types_time_to_mat.png")
+```
+</div>
+
+##Time to Maturity Effects at Instrument Level
+<div class="centered">
+```{r, out.width = "1000px", echo=F}
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\strata_timeToMat2.png")
+```
+</div>
+
+#Regression
+##Spline Prediction
+What is a spline?
+
+- Spline basis functions are piecewise polynomials used in fitting curves which are linear in terms of the basis function.
+- Cubic splines in particular have been found to have nice properties with good ability to fit nonlinear curves. 
+- Cubic splines are made to be smooth at the knots, endpoints of intervals on the x-axis
+    - Force first and second derivatives of the function to agree at knots
+
+##Use Penalized Spline in GAM
+- Called a smoothing spline
+- Penalty is integrated second derivative
+- Cost function   
+
+      $\sum_{i=1}^N [y_i-f(x_i)]^2 + \lambda \int f''(t)^2 dt$   
+
+- GAM = Generalized Additive Model  
+    - Instead of:  
+      $E[Y|X_1, X_2,...,X_p]=\beta_0+\beta_1X_1+\beta_2X_2+...+\beta_pX_p$  
+    - We have:  
+      $g(E[Y|X_1, X_2,...,X_p])=\beta_0+f(X_1)+f(X_2)+...+f(X_p)$, where g is the link function. 
+
+##Models
+<div class="centered">
+```{r out.width = "700px", echo=F}
+#library(rmarkdown)
+#latex_dependency('multirow', options = NULL)
+knitr::include_graphics("predictors.jpg")
+```
+</div>
+
+- One Model Paradigm: One model for all markets   
+- Multiple Model Paradigm: One model for each market  
+- Primes are before instrument is added
+    - We want to know if knowing the instrument makes model better
+    - "s" denotes spline basis function on predictor variable
+
+#Regression Results
+##Spline Curves
+<div class="centered">
+```{r, out.width = "400px", echo=F}
+par(mfrow=c(2,1))
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\thesis writeup\\splineDoM.png")
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\thesis writeup\\splineTTM.png")
+```
+</div>
+- Day of month spline curves reinforce patterns seen in the exploratory analysis visualizations of essentially constant daily trade volume 
+- Also see anticipated periodicity, but shows a dip around day 8 of 30 for all markets with the exception of FX.
+- The time to maturity spline curve for bond serves as reinforcement of the differences given that the curve begins
+to rise sharply around 150  days
+
+<div class="notes">
+- TTM doesn't stay low as anticipated.
+- The upward trend due to the effect of ZQ, as 150 days is where it begins to deviate from the other instruments. 
+- Proper modeling should separate ZQ from other bonds.
+</div>
+
+##Comparing All Models at Market Level
+<div class="centered">
+```{r echo=F}
+knitr::include_graphics("resultsTab4.jpg")
+```
+</div>
+- Consider the best model 
+- Agriculture, energy,and index
+    - Relative errors of 0.182, 0.113, and 0.164 respectively  
+- Metal, bond, and FX 
+    - Relative errors of 0.379, 0.254, and 0.301 respectively
+
+##Comparing Models at Instrument Level
+<div class="columns-2">
+```{r out.width = "450px", echo=F}
+knitr::include_graphics("resultsTab2.jpg")
+```
+
+- Relative error is under .20 for most instruments. 
+- Exceptions are both metals (GC and SI) as on the market level, both FX instruments (6E and GE) as on the market level, and three
+bonds: 30 Day Fed Fund (ZQ), 30 Yr U.S. Treasury Bond (ZB), and 10Y Treasury
+Note (ZN).  
+- Relative errors are 0.360, 0.405, 0.2676, 0.459, 0.257, 0.266, and 0.227 respectively. 
+</div>
+
+#Relationship Between Trade Volume and Price Volatility
+
+##Trade Volume Data Set
+```{r, out.width = "1000px", echo=F}
+knitr::include_graphics("trade_volume.jpg")
+```
+
+##Price Volatility Data Set
+```{r, out.width = "1000px", echo=F}
+knitr::include_graphics("price_volatility.jpg")
+```
+volatility measured with standard deviation
+
+##Consistency of Correlations
+- We want to know if correlation doesn't change with time
+
+- Product must have at least 30 data points
+
+- Look at hourly data and calculate correlation between trade volume and price volatility. 
+
+- Regress correlations on day
+
+- Test for $\beta_1=0$
+
+- Correct for multiple testing error using B-H Procedure
+
+##Look at Active Trading period
+<div class="centered">
+```{r out.width = "400px", echo=F}
+par(mfrow=c(2,2))
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\thesis writeup\\NQcor_plot.png")
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\thesis writeup\\ZCcor_plot.png")
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\thesis writeup\\NQtradevolume.png")
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\thesis writeup\\ZCtradevolume.png")
+```
+</div>
+<div class="notes">
+implies should trim 60-90th percentiles before regression, but there are better approaches for making this demarcation
+</div>
+
+#Relationship Results
+##Significant Products at FDR=.2
+<div class="centered">
+```{r out.width = "400px", echo=F}
+knitr::include_graphics("sig.jpg")
+```
+</div>
+
+- 5 year treasury note (ZF)
+- Rbob gasoline (RB) 
+- 30 Day Fed Fund (ZQ)
+- Mini Dow Jones index (YM) 
+- Heating oil (HO)
+
+##Significant Correlation Plots with Best Fit Line 
+<div class="centered">
+```{r out.width = "320px", echo=F}
+par(mfrow=c(2,2))
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\thesis writeup\\Coeff_fitZQ2016-08-31.png")
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\thesis writeup\\Coeff_fitYM2017-03-17.png")
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\thesis writeup\\Coeff_fitHO2016-11-30.png")
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\thesis writeup\\Coeff_fitZF2016-12-30.png")
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\thesis writeup\\Coeff_fitRB2016-07-29.png")
+```
+</div>
+
+##Looking at Deemed Active Period  
+<div class="centered">
+```{r out.width = "320px", echo=F}
+par(mfrow=c(2,2))
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\thesis writeup\\ZQtradevolumeTrim.png")
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\thesis writeup\\YMtradevolumeTrim.png")
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\thesis writeup\\HOtradevolumeTrim.png")
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\thesis writeup\\ZFtradevolumeTrim.png")
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\thesis writeup\\RBtradevolumeTrim.png")
+```
+</div>
+
+Dashes denote 60th-90th volume percentiles
+
+##Anything Truly Interesting?
+- ZQ and 5 year treasury note (ZF) showing idealized pattern of dense population above zero. 
+- Moreover, none of the products manifest a sharp increase, which typically delineates low and high volumes. 
+- We can safely exclude the effects of nascent and near maturity periods from all but Rbob gasoline (RB) since the selected area of
+this product is still very close to maturity. 
+- Non-constant correlation significance is legitimate for ZQ, mini Dow Jones index (YM), heating oil (HO), and ZF 
+- These products price volatilities will not be well predicted by trade volume over time because their correlation does not remain constant.
+
+##Checking Daily and Hourly Correlations
+</div>
+<div class="notes">
+0 correlation useless for predicting price volatility from trade volume.
+</div>
+<div class="centered">
+```{r, out.width = "400px", echo=F}
+par(mfrow=c(2,1))
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\thesis writeup\\CL2017-01-20hourly.png")
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\thesis writeup\\CL2017-01-20daily.png")
+```
+</div>
+
+This is what we expect based on past research.
+
+- Positive correlation
+- Consistency accross time intervals
+- Most products manifest both
+
+
+## Deviating Products
+<div class="centered">
+```{r out.width = "320px", echo=F}
+par(mfrow=c(2,3))
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\thesis writeup\\6E2017-06-19hourly.png")
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\thesis writeup\\ZQ2016-07-29hourly.png")
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\thesis writeup\\GE2016-09-19hourly.png")
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\thesis writeup\\6E2017-06-19daily.png")
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\thesis writeup\\ZQ2016-07-29daily.png")
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\thesis writeup\\GE2016-09-19daily.png")
+```
+</div>
+
+
+## Deviating Products Cont'd
+<div class="centered">
+```{r out.width = "320px", echo=F}
+par(mfrow=c(2,3))
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\thesis writeup\\ZB2016-09-21hourly.png")
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\thesis writeup\\ZM2016-10-14hourly.png")
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\thesis writeup\\KE2016-12-14hourly.png")
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\thesis writeup\\ZB2016-09-21daily.png")
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\thesis writeup\\ZM2016-10-14daily.png")
+knitr::include_graphics("C:\\Users\\anito\\Documents\\Grad_School\\JHU\\700\\thesis writeup\\KE2016-12-14daily.png")
+```
+</div>
+<div class="notes">
+- for most products the daily correlations are stronger and less noisy than the hourly correlations. 
+- In some cases where there is clustering, such as Kc Hrw wheat (KE), 30 Yr U.S. Treasury Bond (ZB), and soybean meal (ZM),
+- Observations should be partitioned into low and high volumes before taking correlations into account for price prediction. 
+- For agriculture instruments seasonality and temperature most likely play a part in the trade volume clustering observed.
+</div>
+
+##What we Conclude 
+- Apache Spark is an efficient way to process massive datasets. 
+- Using a penalized regression spline is an effective way of predicting trade volume, granted products are similar and we have large set of data to fit models.
+- The covariates most indicative of trade volume are time to maturity and instrument
+name
+- Penalized regression splines are a useful tool for tasks such as building
+trading algorithms, improving traders' effectiveness, and controlling trading risk. 
+
+##What we Conclude Cont'd
+- Predicting price volatility from trade volume is viable in the majority of cases, as long as forecasting is made
+over a trade's active period since correlations observed are constant over time.
+- Theory behind speculator and hedger behavior since positive correlation between trade volume and price volatility, validating 
+- Positive correlation between trade volume and price volatility is not maintained across all time increments. 
+    - Positive correlation is mainly observed in measurements made daily, but for the same product, the correlation is not necessarily observed hourly.
+- In cases of product seasonality, clusters exist and negative correlations may be seen for trades maturing in six or more
+months in the future. 
+
+<div class="notes">
+- These new insights advance regulatory decisions on futures markets
+- Hoped conclusions stated will inspire others to delve further into the study of futures markets in general.
+</div>
+
+##Acknowledgements
+Thanks to my graduate advisor, Professor Daniel Naiman.  
+
+Thanks also to the Johns Hopkins University Acheson J. Duncan Fund for their support of this research.
+
+#Questions? Feedback welcome!
+

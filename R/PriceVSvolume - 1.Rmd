@@ -1,0 +1,39 @@
+---
+title: "Price Vol VS Tade Volume"
+author: "Tobi Bosede"
+date: "January 27, 2017"
+output: html_document
+---
+```{r, warning=FALSE}
+## Warning in cor(as.numeric(x[4:16]), as.numeric(x[17:29])): the standard
+## deviation is zero
+setwd("C:\\Users\\aniverb\\Documents\\Grad_School\\JHU\\700")
+
+tv=read.table("trades_pivot_2016-11-18.txt", header=T) 
+head(tv)
+pv=read.table("trades_pivot_vol_2016-11-18.txt", header = T)
+#tot vol is not actually vol for all prices in day, but for vol of hourly vol/sd
+#sd(c(4.195,	2.388,	5.414,	15.202,	10.399,	2.44,	6.733,	3.743,	4.343,	1.836,	5.19,	0.0,	0.0)) #4.2
+head(pv) 
+tv_pv_comb=cbind(tv[,1:16], pv[,4:16])
+head(tv_pv_comb)
+products=as.vector(unique(tv_pv_comb$ProductName))
+for (product in products){
+  tv_pv_combS=subset(tv_pv_comb, ProductName==product)
+  maturities=as.vector(unique(tv_pv_combS$Maturity))
+  for (maturity in maturities){
+    tv_pv_combM=subset(tv_pv_combS, Maturity==maturity)
+    trades=as.vector(as.matrix(t(tv_pv_combM[,4:16])))
+    priceVol=as.vector(as.matrix(t(tv_pv_combM[,17:29])))
+    plot(trades, priceVol, xlab="trade volume hourly", ylab="price volatility hourly", main=paste(product, "Maturity:", maturity), pch=20) #can't do yet for daily b/c of TotVol issue
+    cors=apply(tv_pv_combM, 1, function(x){cor(as.numeric(x[4:16]), as.numeric(x[17:29]))})
+    days=nrow(tv_pv_combM)
+    plot(1:days, cors, xlab="Day", ylab="correlation coefficient", main=paste(product, "Maturity:", maturity)) 
+  }
+}
+
+```
+
+
+```{r}
+```

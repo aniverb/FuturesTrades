@@ -1,0 +1,19 @@
+\select@language {english}
+\contentsline {section}{Abstract}{ii}{section*.1}
+\contentsline {section}{Acknowledgments}{iii}{section*.2}
+\contentsline {section}{List of Tables}{v}{section*.4}
+\contentsline {section}{List of Figures}{vi}{section*.5}
+\contentsline {section}{Introduction}{1}{section*.6}
+\contentsline {section}{Methods}{3}{section*.7}
+\contentsline {section}{Results}{11}{section*.16}
+\contentsline {section}{Discussion}{17}{section*.30}
+\contentsline {section}{Conclusion}{21}{section*.32}
+\contentsline {section}{Appendices}{22}{section*.33}
+\contentsline {subsection}{\numberline {A:}Spark/python code for raw data generation}{22}{subsection.Alph0.1}
+\contentsline {subsection}{\numberline {B:}Spark/python code for creating datasets to be analyzed}{24}{subsection.Alph0.2}
+\contentsline {subsection}{\numberline {C:}Python code for exploratory data analysis}{27}{subsection.Alph0.3}
+\contentsline {subsection}{\numberline {D:}R code for spline regression for trade volume}{29}{subsection.Alph0.4}
+\contentsline {subsection}{\numberline {E:}R code for price volatility and trade volume relationship}{33}{subsection.Alph0.5}
+\contentsline {section}{Bibliography}{36}{section*.34}
+\contentsline {section}{Curriculum Vitae}{37}{section*.35}
+\contentsfinish 

@@ -1,0 +1,32 @@
+Big Data Analysis of Futures:  Penalized Regression Splines for Trade Volume Prediction and Price Volatility vs. Trade Volume Relationship
+========================================================
+author: Tobi Bosede
+date: 
+autosize: false
+
+First Slide
+========================================================
+
+For more details on authoring R presentations please visit <https://support.rstudio.com/hc/en-us/articles/200486468>.
+hundreds of millions of rows of futures trading data
+- Bullet 1
+- Bullet 2
+- Bullet 3
+
+<center>testing</center>
+blers
+dsgs
+
+Slide With Code
+========================================================
+#type: section
+```{r}
+summary(cars)
+```
+
+Slide With Plot
+========================================================
+#type: prompt
+```{r, echo=FALSE}
+plot(cars)
+```

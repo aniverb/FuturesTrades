@@ -1,0 +1,56 @@
+\begin{thebibliography}{1}
+
+\bibitem{economist_10}
+The data deluge, Feb 2010.
+
+\bibitem{bessembinder1993price}
+Hendrik Bessembinder and Paul~J Seguin.
+\newblock Price volatility, trading volume, and market depth: Evidence from
+  futures markets.
+\newblock {\em Journal of financial and Quantitative Analysis}, 28(01):21--39,
+  1993.
+
+\bibitem{foster1995volume}
+Andrew~J Foster.
+\newblock Volume-volatility relationships for crude oil futures markets.
+\newblock {\em Journal of Futures Markets}, 15(8):929--951, 1995.
+
+\bibitem{harrell2015regression}
+Frank Harrell.
+\newblock {\em Regression modeling strategies: with applications to linear
+  models, logistic and ordinal regression, and survival analysis}.
+\newblock Springer, 2015.
+
+\bibitem{meng2016mllib}
+Xiangrui Meng, Joseph Bradley, B~Yuvaz, Evan Sparks, Shivaram Venkataraman,
+  Davies Liu, Jeremy Freeman, D~Tsai, Manish Amde, Sean Owen, et~al.
+\newblock Mllib: Machine learning in apache spark.
+\newblock {\em JMLR}, 17(34):1--7, 2016.
+
+\bibitem{satish2014predicting}
+Venkatesh Satish, Abhay Saxena, and Max Palmer.
+\newblock Predicting intraday trading volume and volume percentages.
+\newblock {\em The Journal of Trading}, 9(3):15--25, 2014.
+
+\bibitem{zaharia2012resilient}
+Matei Zaharia, Mosharaf Chowdhury, Tathagata Das, Ankur Dave, Justin Ma, Murphy
+  McCauley, Michael~J Franklin, Scott Shenker, and Ion Stoica.
+\newblock Resilient distributed datasets: A fault-tolerant abstraction for
+  in-memory cluster computing.
+\newblock In {\em Proceedings of the 9th USENIX conference on Networked Systems
+  Design and Implementation}, pages 2--2. USENIX Association, 2012.
+
+\bibitem{zaharia2010spark}
+Matei Zaharia, Mosharaf Chowdhury, Michael~J Franklin, Scott Shenker, and Ion
+  Stoica.
+\newblock Spark: cluster computing with working sets.
+\newblock {\em HotCloud}, 10:10--10, 2010.
+
+\bibitem{zaharia2016apache}
+Matei Zaharia, Reynold~S Xin, Patrick Wendell, Tathagata Das, Michael Armbrust,
+  Ankur Dave, Xiangrui Meng, Josh Rosen, Shivaram Venkataraman, Michael~J
+  Franklin, et~al.
+\newblock Apache spark: a unified engine for big data processing.
+\newblock {\em Communications of the ACM}, 59(11):56--65, 2016.
+
+\end{thebibliography}

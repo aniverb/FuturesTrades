@@ -1,0 +1,126 @@
+---
+title: "Trade Count Regression - One Model"
+author: "Tobi Bosede"
+date: "December 15, 2016"
+output: html_document
+---
+550.700
+```{r, message=FALSE, warning=FALSE}
+library(mgcv)
+library(ggplot2)
+```
+
+```{r}
+setwd("C:/Users/aniverb/Documents/Grad_School/JHU/700")
+trade_data=read.table("trades_count_regression_2016-11-18.txt", header=T)
+head(trade_data)
+```
+
+```{r}
+#use only half of data randomly split into train and test
+n=dim(trade_data)[1]/2
+reg_data=trade_data[1:n, ]
+set.seed(12-1-16)
+train_id=sample(1:n, n)[1:floor(n/2)]
+train=reg_data[train_id, ]
+test=reg_data[-train_id, ]
+```
+
+Build linear regression model with penalized cubic spline. Spline parameters found by cross validation.
+```{r}
+model1 <- gam(TradeTotBCTrans ~ s(TimeToMaturity, bs="cr") + s(DayofMonth, bs="cr") + s(Day, bs="cr") + factor(ProductType) + factor(ProductName) + factor(DayOfTheWeek), family=gaussian(), data = train, method="GCV.Cp", select=TRUE)
+summary(model1)
+```
+The model is not very good as the Adjust R sq is barely .5 as well, only about half of the deviance/variation is explained.
+
+```{r}
+plot(model1)
+p <- predict(model1, type="lpmatrix")
+beta <- coef(model1)[grepl("Day", names(coef(model1)))]
+s <- p[,grepl("Day", colnames(p))] %*% beta
+ggplot(data=cbind.data.frame(s, train$Day), aes(x=train$Day, y=s, ymin = -15, ymax = 5)) + geom_line()
+```
+
+Dips occur on Mondays and peaks on Tuesdays.
+```{r}
+optFrame=cbind.data.frame(s, train)
+sub=subset(optFrame, train$Day<50)
+which(sub$s==min(sub$s))
+sub[22,] 
+
+sub=subset(optFrame, 50<train$Day & train$Day<75)
+which(sub$s==max(sub$s))
+sub[28,]
+
+sub=subset(optFrame, 75<train$Day & train$Day<100)
+which(sub$s==min(sub$s))
+sub[45,]
+
+which(sub$s==max(sub$s))
+sub[57,]
+```
+
+Consistent with model coefficients but inconsistent with median of entire data. Due to sampling? More samples for Wed in entire data than in sample.
+```{r}
+test=subset(optFrame, train$DayOfTheWeek=="Mon")
+dim(test)
+test=subset(optFrame, train$DayOfTheWeek=="Tue")
+dim(test)
+test=subset(optFrame, train$DayOfTheWeek=="Wed")
+dim(test)
+```
+
+```{r}
+beta <- coef(model1)[grepl("TimeToMaturity", names(coef(model1)))]
+s <- p[,grepl("TimeToMaturity", colnames(p))] %*% beta
+ggplot(data=cbind.data.frame(s, train$TimeToMaturity), aes(x=train$TimeToMaturity, y=s, ymin = -15, ymax = 5)) + geom_line()
+beta <- coef(model1)[grepl("DayofMonth", names(coef(model1)))]
+s <- p[,grepl("DayofMonth", colnames(p))] %*% beta
+ggplot(data=cbind.data.frame(s, train$DayofMonth), aes(x=train$DayofMonth, y=s, ymin = -15, ymax = 5)) + geom_line()
+```
+
+```{r}
+model1$coefficients
+model1$sp #spline parameters
+```
+
+Unsurprisingly, the below residuals are quite large, especially since they are for the box cox transformed trade counts. However they seem constant so an assumption of the linear regression model is fufilled.
+```{r}
+res=model1$residuals
+plot(res, pch=20)
+hist(res)
+```
+
+Actual values are black, predicted values are red
+```{r}
+trainPred=model1$fitted.values
+
+plot(train$TimeToMaturity, train$TradeTotBCTrans, pch=20)
+points(train$TimeToMaturity, trainPred, col="red", pch=20)
+legend("topright", c("actual", "predicted"),lwd=c(3,3),col=c("black", "red"))
+
+plot(train$Day, train$TradeTotBCTrans, pch=20)
+points(train$Day, trainPred, col="red", pch=20)
+```
+
+Nice thing about this model is that it's performance remains just as bad on the test data. The point being that at least it does not perform worse on new data.
+```{r}
+testPred <- predict(model1, test)
+
+plot(test$TimeToMaturity, test$TradeTotBCTrans, pch=20)
+points(test$TimeToMaturity, testPred, col="red", pch=20)
+legend("topright", c("actual", "predicted"),lwd=c(3,3),col=c("black", "red"))
+
+plot(test$Day, test$TradeTotBCTrans, pch=20)
+points(test$Day, testPred, col="red", pch=20)
+```
+
+Not significantly better than model 1
+```{r}
+#with day of month factored instead of splined(ceates a lot of addtl vars)
+model2 <- gam(TradeTotBCTrans ~ s(TimeToMaturity, bs="cr") + s(Day, bs="cr") + factor(ProductType) + factor(ProductName) + factor(DayOfTheWeek) + factor(DayofMonth), family=gaussian(), data = train, method="GCV.Cp", select=TRUE)
+summary(model2) 
+plot(model2)
+```
+
+Didn't bother graphing predictions vs actual trades since this model is so similar to the first.

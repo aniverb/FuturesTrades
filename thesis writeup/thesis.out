@@ -1,0 +1,17 @@
+\BOOKMARK [1][-]{section*.1}{Abstract}{}% 1
+\BOOKMARK [1][-]{section*.2}{Acknowledgments}{}% 2
+\BOOKMARK [1][-]{section*.4}{List of Tables}{}% 3
+\BOOKMARK [1][-]{section*.5}{List of Figures}{}% 4
+\BOOKMARK [1][-]{section*.6}{Introduction}{}% 5
+\BOOKMARK [1][-]{section*.7}{Methods}{}% 6
+\BOOKMARK [1][-]{section*.16}{Results}{}% 7
+\BOOKMARK [1][-]{section*.30}{Discussion}{}% 8
+\BOOKMARK [1][-]{section*.32}{Conclusion}{}% 9
+\BOOKMARK [1][-]{section*.33}{Appendices}{}% 10
+\BOOKMARK [2][-]{subsection.Alph0.1}{Spark/python code for raw data generation}{section*.33}% 11
+\BOOKMARK [2][-]{subsection.Alph0.2}{Spark/python code for creating datasets to be analyzed}{section*.33}% 12
+\BOOKMARK [2][-]{subsection.Alph0.3}{Python code for exploratory data analysis}{section*.33}% 13
+\BOOKMARK [2][-]{subsection.Alph0.4}{R code for spline regression for trade volume}{section*.33}% 14
+\BOOKMARK [2][-]{subsection.Alph0.5}{R code for price volatility and trade volume relationship}{section*.33}% 15
+\BOOKMARK [1][-]{section*.34}{Bibliography}{}% 16
+\BOOKMARK [1][-]{section*.35}{Curriculum Vitae}{}% 17

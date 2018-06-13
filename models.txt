@@ -1,0 +1,26 @@
+           One Model - type as a categorical feature
+model 1'
+TradeTotBCTrans ~ s(TimeToMaturity, bs = "cr") + s(DayofMonth, 
+     bs = "cr") + factor(ProductType) +   factor(DayOfTheWeek)
+
+	 	 || add product as factor
+	     \/
+		 
+model 1
+TradeTotBCTrans ~ s(TimeToMaturity, bs = "cr") + s(DayofMonth, 
+     bs = "cr") + factor(ProductType) + factor(ProductName) + 
+     factor(DayOfTheWeek)
+	 
+_____________________________________________________________________	 
+         
+		Multiple Models - model each type seperately
+model 2'
+ TradeTotBCTrans ~ s(TimeToMaturity, bs = "cr") + s(DayofMonth, 
+     bs = "cr") +  factor(DayOfTheWeek)
+
+	    ||  add product as factor
+	    \/
+	  
+model 2
+ TradeTotBCTrans ~ s(TimeToMaturity, bs = "cr") + s(DayofMonth, 
+     bs = "cr") + factor(ProductName) + factor(DayOfTheWeek)

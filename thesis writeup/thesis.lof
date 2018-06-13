@@ -1,0 +1,20 @@
+\select@language {english}
+\contentsline {figure}{\numberline {1}{\ignorespaces Histograms of trade volume before and after Box-Cox transform\relax }}{4}{figure.caption.8}
+\contentsline {figure}{\numberline {2}{\ignorespaces Plot of trade volume as days pass and as time to maturity gets further.\relax }}{4}{figure.caption.9}
+\contentsline {figure}{\numberline {3}{\ignorespaces Histograms for instrument types\relax }}{5}{figure.caption.10}
+\contentsline {figure}{\numberline {4}{\ignorespaces Plot of trade volume as days pass for instrument types\relax }}{6}{figure.caption.11}
+\contentsline {figure}{\numberline {5}{\ignorespaces Plot of trade volume as time to maturity gets further for instrument types\relax }}{7}{figure.caption.12}
+\contentsline {figure}{\numberline {6}{\ignorespaces Correlation (top) and trade volume (bottom) for NQ maturing 2016-12-16\relax }}{9}{figure.caption.14}
+\contentsline {figure}{\numberline {7}{\ignorespaces Correlation (top) and trade volume (bottom) for ZC maturing 2016-07-14\relax }}{10}{figure.caption.15}
+\contentsline {figure}{\numberline {8}{\ignorespaces Spline curves for best model\relax }}{12}{figure.caption.19}
+\contentsline {figure}{\numberline {9}{\ignorespaces Uniform Q-Q plot\relax }}{13}{figure.caption.20}
+\contentsline {figure}{\numberline {10}{\ignorespaces Correlation regression plots for most significant products\relax }}{14}{figure.caption.22}
+\contentsline {figure}{\numberline {11}{\ignorespaces Price volatility vs. trade volume shows positive correlation\relax }}{15}{figure.caption.23}
+\contentsline {figure}{\numberline {12}{\ignorespaces Price volatility vs. trade volume shows negative correlation\relax }}{15}{figure.caption.24}
+\contentsline {figure}{\numberline {13}{\ignorespaces Price volatility vs. trade volume shows two clusters\relax }}{15}{figure.caption.25}
+\contentsline {figure}{\numberline {14}{\ignorespaces Price volatility vs. trade volume hourly \& daily show different correlations\relax }}{16}{figure.caption.26}
+\contentsline {figure}{\numberline {15}{\ignorespaces Price volatility vs. trade volume hourly \& daily show different clusters\relax }}{16}{figure.caption.27}
+\contentsline {figure}{\numberline {16}{\ignorespaces Price volatility vs. trade volume may show negative correlation cluster\relax }}{16}{figure.caption.28}
+\contentsline {figure}{\numberline {17}{\ignorespaces Price volatility vs. trade volume hourly shows three clusters\relax }}{17}{figure.caption.29}
+\contentsline {figure}{\numberline {18}{\ignorespaces Volume plots for significant products, dashes denote 60th-90th percentiles\relax }}{20}{figure.caption.31}
+\contentsfinish 
